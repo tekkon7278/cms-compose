@@ -18,7 +18,7 @@ RUN apt install -y nodejs
 # application php construction
 WORKDIR /var/www
 RUN git init
-RUN git clone https://github.com/tekkon7278/cms.git app
+RUN git clone https://github.com/tekkon7278/cms-laravel-vue.git app
 WORKDIR /var/www/app
 RUN chmod -R 757 storage
 
