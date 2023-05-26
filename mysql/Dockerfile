@@ -1,3 +1,1 @@
-FROM mysql
-
-RUN apt update
+FROM mysql:8.1
