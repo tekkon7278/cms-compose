@@ -1,0 +1,102 @@
+version: "3"
+
+networks:
+  net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.0.0/28
+
+volumes:
+  static_contents:
+  certs:
+  mysql_data:
+
+services:
+  logger:
+    build: ./fluent
+    ports:
+      - "24224:24224"
+    volumes:
+      - /srv/docker/mount/cms/log/:/fluentd/log/
+    environment:
+      - TZ=Asia/Tokyo
+
+  mysql:
+    build: ./mysql
+    ports:
+      - "3306:3306"
+    environment:
+      TZ: Asia/Tokyo
+      MYSQL_ROOT_PASSWORD: admin7278
+      MYSQL_DATABASE: cms
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_USER: system
+      MYSQL_PASSWORD: admin7278
+    volumes:
+      - mysql_data:/var/lib/mysql/
+    logging:
+      driver: "fluentd"
+      options:
+        tag: "mysql"
+    networks:
+      net:
+        aliases:
+          - mysql
+    depends_on:
+       - logger
+
+  php:
+    build: ./php
+    ports:
+      - "9000:9000"
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - static_contents:/var/www/app/public/
+    logging:
+      driver: "fluentd"
+      options:
+        tag: "php"
+    networks:
+      net:
+        aliases:
+          - php
+    depends_on:
+      - logger
+      - mysql
+
+  web:
+    build: ./nginx
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - static_contents:/usr/share/nginx/html/
+      - certs:/etc/nginx/ssl/
+    logging:
+      driver: "fluentd"
+      options:
+        tag: "nginx"
+    networks:
+      net:
+        aliases:
+          - web
+    depends_on:
+      - logger
+      - php
+
+  certbot:
+    build: ./certbot
+    volumes:
+      - static_contents:/var/www/html/
+      - certs:/etc/letsencrypt
+    command: >
+      certonly --webroot --keep --agree-tos
+      -d tkng.site
+      -w /var/www/html/
+      -m st6.048153@gmail.com
+    depends_on:
+      - web
