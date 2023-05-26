@@ -1,7 +1,7 @@
 FROM php:8.1-fpm
 
-RUN docker-php-ext-install pdo_mysql
 RUN apt update
+RUN docker-php-ext-install pdo_mysql
 
 # composer install
 RUN curl -sS https://getcomposer.org/installer | php

@@ -1,2 +1,3 @@
 FROM mysql
-#COPY ./files/init/ /docker-entrypoint-initdb.d/
+
+RUN apt update
