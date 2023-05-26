@@ -35,6 +35,8 @@ services:
       MYSQL_PASSWORD: admin7278
     volumes:
       - mysql_data:/var/lib/mysql/
+    healthcheck: mysqladmin ping -u system -padmin7278
+      test: 
     logging:
       driver: "fluentd"
       options:
