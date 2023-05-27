@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 networks:
   net:
@@ -67,8 +67,8 @@ services:
         aliases:
           - php
     depends_on:
-      - logger
-      - mysql
+      mysql:
+        condition: service_healthy
 
   web:
     build: ./nginx
@@ -89,7 +89,6 @@ services:
         aliases:
           - web
     depends_on:
-      - logger
       - php
 
   certbot:
