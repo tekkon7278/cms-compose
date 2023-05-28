@@ -28,11 +28,11 @@ services:
       - "3306:3306"
     environment:
       TZ: Asia/Tokyo
-      MYSQL_ROOT_PASSWORD: admin7278
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: cms
       MYSQL_ROOT_HOST: '%'
       MYSQL_USER: system
-      MYSQL_PASSWORD: admin7278
+      MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql/
     healthcheck:
