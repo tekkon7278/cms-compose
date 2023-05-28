@@ -34,6 +34,3 @@ RUN npm run build
 
 # create application key
 RUN php artisan key:generate
-
-# create tables
-RUN php artisan migrate
