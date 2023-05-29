@@ -15,8 +15,6 @@ volumes:
 services:
   logger:
     build: ./fluent
-    ports:
-      - "24224:24224"
     volumes:
       - /srv/docker/mount/cms/log/:/fluentd/log/
     environment:
@@ -52,8 +50,6 @@ services:
 
   php:
     build: ./php
-    ports:
-      - "9000:9000"
     environment:
       TZ: Asia/Tokyo
     volumes:
