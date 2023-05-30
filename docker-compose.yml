@@ -23,7 +23,10 @@ services:
       - TZ=Asia/Tokyo
 
   mysql:
-    build: ./mysql
+    build:
+      context: ./mysql
+      args:
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     environment:
@@ -35,6 +38,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql/
+      - /srv/docker/mount/cms/mysql/backup/:/srv/backup/data/
     healthcheck:
       test: mysqladmin ping -u system -padmin7278
       timeout: 10s
