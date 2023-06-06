@@ -97,7 +97,7 @@ services:
     build: ./certbot
     volumes:
       - static_contents:/var/www/html/
-      - certs:/etc/letsencrypt
+      - certs:/etc/letsencrypt/live/
     command: >
       certonly --webroot --keep --agree-tos
       -d tkng.site
