@@ -29,7 +29,7 @@ RUN composer install
 COPY ./files/.env /var/www/app
 
 # javascript construction
-RUN npm install @vue/cli @vitejs/plugin-vue vuetify vue-router @mdi/font
+RUN npm install
 RUN npm run build
 
 # create application key
