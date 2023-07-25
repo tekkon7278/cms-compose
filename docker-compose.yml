@@ -55,7 +55,11 @@ services:
        - logger
 
   php:
-    build: ./php
+    build:
+      context: ./php
+      args:
+        - APP_DOMAIN=${APP_DOMAIN}
+        - APP_GIT_URL=${APP_GIT_URL}
     environment:
       TZ: Asia/Tokyo
     volumes:
@@ -80,7 +84,7 @@ services:
       - certs:/etc/letsencrypt/
     command: >
       certonly --standalone -n --keep --agree-tos
-      -d tkng.site
+      -d ${APP_DOMAIN}
       -w /var/www/html/
       -m st6.048153@gmail.com
 
@@ -114,6 +118,6 @@ services:
       - certs:/etc/letsencrypt/
     command: >
       certonly --webroot -n --keep --agree-tos
-      -d tkng.site
+      -d ${APP_DOMAIN}
       -w /var/www/html/
       -m st6.048153@gmail.com
