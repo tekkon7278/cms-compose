@@ -72,6 +72,7 @@ services:
       mysql:
         condition: service_healthy
 
+  # certbot for first time build
   certbot:
     build: ./certbot
     volumes:
@@ -102,6 +103,17 @@ services:
         aliases:
           - web
     depends_on:
-      - php
+      - logger
       - certbot
 
+  # certbot for update cert
+  certbot-renew:
+    build: ./certbot
+    volumes:
+      - static_contents:/var/www/html/
+      - certs:/etc/letsencrypt/
+    command: >
+      certonly --webroot -n --keep --agree-tos
+      -d tkng.site
+      -w /var/www/html/
+      -m st6.048153@gmail.com
