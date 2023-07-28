@@ -1,5 +1,7 @@
 FROM php:8.1-fpm
 
+ARG APP_GIT_URL
+
 #packegs update
 RUN apt update
 
@@ -21,7 +23,7 @@ RUN apt install -y nodejs
 # application source get
 WORKDIR /var/www
 RUN git init
-RUN git clone https://github.com/tekkon7278/cms-laravel-vue.git app
+RUN git clone ${APP_GIT_URL} app
 WORKDIR /var/www/app
 RUN chmod -R 757 storage
 

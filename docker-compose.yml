@@ -55,7 +55,11 @@ services:
        - logger
 
   php:
-    build: ./php
+    build:
+      context: ./php
+      args:
+        - APP_DOMAIN=${APP_DOMAIN}
+        - APP_GIT_URL=${APP_GIT_URL}
     environment:
       TZ: Asia/Tokyo
     volumes:
@@ -71,6 +75,18 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+
+  # certbot for first time build
+  certbot:
+    build: ./certbot
+    volumes:
+      - static_contents:/var/www/html/
+      - certs:/etc/letsencrypt/
+    command: >
+      certonly --standalone -n --keep --agree-tos
+      -d ${APP_DOMAIN}
+      -w /var/www/html/
+      -m st6.048153@gmail.com
 
   web:
     build: ./nginx
@@ -91,17 +107,17 @@ services:
         aliases:
           - web
     depends_on:
-      - php
+      - logger
+      - certbot
 
-  certbot:
+  # certbot for update cert
+  certbot-renew:
     build: ./certbot
     volumes:
       - static_contents:/var/www/html/
-      - certs:/etc/letsencrypt
+      - certs:/etc/letsencrypt/
     command: >
-      certonly --webroot --keep --agree-tos
-      -d tkng.site
+      certonly --webroot -n --keep --agree-tos
+      -d ${APP_DOMAIN}
       -w /var/www/html/
       -m st6.048153@gmail.com
-    depends_on:
-      - web
