@@ -76,18 +76,6 @@ services:
       mysql:
         condition: service_healthy
 
-  # certbot for first time build
-  certbot:
-    build: ./certbot
-    volumes:
-      - static_contents:/var/www/html/
-      - certs:/etc/letsencrypt/
-    command: >
-      certonly --standalone -n --keep --agree-tos
-      -d ${APP_DOMAIN}
-      -w /var/www/html/
-      -m st6.048153@gmail.com
-
   web:
     build: ./nginx
     ports:
@@ -107,11 +95,10 @@ services:
         aliases:
           - web
     depends_on:
-      - logger
-      - certbot
+      - php
 
   # certbot for update cert
-  certbot-renew:
+  certbot:
     build: ./certbot
     volumes:
       - static_contents:/var/www/html/
