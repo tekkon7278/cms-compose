@@ -30,6 +30,7 @@ COPY ./files/.env /var/www/app
 
 # javascript construction
 RUN npm install
+ENV NODE_OPTIONS "--max-old-space-size=2048"
 RUN npm run build
 
 # create application key
