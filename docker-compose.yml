@@ -108,3 +108,5 @@ services:
       -d ${APP_DOMAIN}
       -w /var/www/html/
       -m st6.048153@gmail.com
+    depends_on:
+      - web
