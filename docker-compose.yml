@@ -97,7 +97,6 @@ services:
     depends_on:
       - php
 
-  # certbot for update cert
   certbot:
     build: ./certbot
     volumes:
